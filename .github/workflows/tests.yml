@@ -201,8 +201,10 @@ jobs:
           mkdir -p logs
           python3 dm/ios/tools/build_smoke.py --output "$RUNNER_TEMP/ios-smoke" 2>&1 | tee logs/ios-build.log
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        if: failure()
+        if: always()
         with:
-          name: logs-ios-build
-          path: logs
+          name: nxnative-ios-app
+          path: |
+            logs
+            ${{ runner.temp }}/ios-smoke
           retention-days: 7
