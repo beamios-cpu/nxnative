@@ -189,22 +189,35 @@ jobs:
   ios-build:
     name: Unsigned iOS app (synthetic modules, Swift and link)
     runs-on: xcode-27
-    timeout-minutes: 40
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+
+      # 1. ติดตั้ง gdown สำหรับโหลดไฟล์ขนาดใหญ่จาก Google Drive
+      - name: Install gdown
+        run: python3 -m pip install gdown
+
+      # 2. ดึงไฟล์ romfs.zip จาก Google Drive (แทนที่ FILE_ID ด้วย ID ของคุณ)
+      - name: Download ROM files from Google Drive
+        run: |
+          gdown https://drive.google.com/uc?id=1KCfntRbWvSO3r9zDnRKsoUybPYwC6lhE -O romfs.zip
+          unzip -o romfs.zip -d dm/ios/
+
       - name: Install XcodeGen
         run: command -v xcodegen || brew install xcodegen
+
+      # 3. รันสคริปต์บิลด์แอปตามปกติ
       - name: Build the production iOS project with synthetic inputs
         run: |
           mkdir -p logs
           python3 dm/ios/tools/build_smoke.py --output "$RUNNER_TEMP/ios-smoke" 2>&1 | tee logs/ios-build.log
+
+      # 4. ส่งออก Artifacts
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
         with:
-          name: nxnative-ios-app
-          path: |
-            logs
-            ${{ runner.temp }}/ios-smoke
+          name: nxnative-full-ipa
+          path: ${{ runner.temp }}/ios-smoke
           retention-days: 7
