@@ -195,29 +195,29 @@ jobs:
         with:
           persist-credentials: false
 
-      # 1. ติดตั้ง gdown สำหรับโหลดไฟล์ขนาดใหญ่จาก Google Drive
-      - name: Install gdown
-        run: python3 -m pip install gdown --break-system-packages
-
-      # 2. ดึงไฟล์ romfs.zip จาก Google Drive (แทนที่ FILE_ID ด้วย ID ของคุณ)
-      - name: Download ROM files from Google Drive
+      # 1. ติดตั้งโปรแกรมเสริมทั้งหมดที่คู่มือโปรเจกต์ต้องการ
+      - name: Install build dependencies
         run: |
-          gdown https://drive.google.com/uc?id=1KCfntRbWvSO3r9zDnRKsoUybPYwC6lhE -O romfs.zip
-          unzip -o romfs.zip -d dm/ios/
+          brew install xcodegen zstd glslang
+          brew install --cask dotnet-sdk
+          python3 -m pip install gdown lz4 capstone fonttools "backports.zstd; python_version < '3.14'" --break-system-packages
 
-      - name: Install XcodeGen
-        run: command -v xcodegen || brew install xcodegen
+      # 2. ดึงไฟล์เกม .nsp และคีย์ จาก Google Drive
+      - name: Download Game Files from Google Drive
+        run: |
+          gdown https://drive.google.com/uc?id=1IYsUZKYDhw7IdIEckexnualHzAGWnyy6 -O game_files.zip
+          unzip -o game_files.zip -d game_folder/
 
-      # 3. รันสคริปต์บิลด์แอปตามปกติ
-      - name: Build the production iOS project with synthetic inputs
+      # 3. รันสคริปต์สร้าง IPA ตัวจริง
+      - name: Build the production iOS IPA
         run: |
           mkdir -p logs
-          python3 dm/ios/tools/build_smoke.py --output "$RUNNER_TEMP/ios-smoke" 2>&1 | tee logs/ios-build.log
+          python3 scripts/build_ipa_from_nsp.py game_folder/ -k game_folder/prod.keys 2>&1 | tee logs/ios-build.log
 
-      # 4. ส่งออก Artifacts
-      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      # 4. ส่งออกไฟล์ .ipa สำหรับติดตั้ง
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
         if: always()
         with:
           name: nxnative-full-ipa
-          path: ${{ runner.temp }}/ios-smoke
+          path: game_folder/*.ipa
           retention-days: 7
