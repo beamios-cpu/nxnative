@@ -197,7 +197,7 @@ jobs:
 
       # 1. ติดตั้ง gdown สำหรับโหลดไฟล์ขนาดใหญ่จาก Google Drive
       - name: Install gdown
-        run: python3 -m pip install gdown
+        run: python3 -m pip install gdown --break-system-packages
 
       # 2. ดึงไฟล์ romfs.zip จาก Google Drive (แทนที่ FILE_ID ด้วย ID ของคุณ)
       - name: Download ROM files from Google Drive
