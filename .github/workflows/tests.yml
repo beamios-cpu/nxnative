@@ -205,7 +205,7 @@ jobs:
       # 2. ดึงไฟล์เกม .nsp และคีย์ จาก Google Drive
       - name: Download Game Files from Google Drive
         run: |
-          gdown https://drive.google.com/uc?id=1_NxLci73wpWZZzhAk2SYu6cwveEvLSg_ -O game_files.zip
+          gdown https://drive.google.com/uc?id=1V-fh05h5p4pGc-9obvB5l_RWmrXGR5N7 -O game_files.zip
           unzip -o game_files.zip -d game_folder/
           # เพิ่ม 2 บรรทัดนี้ เพื่อดึงไฟล์ prod.keys และ .nsp ออกมาจากโฟลเดอร์ที่ซ้อนกัน
           find game_folder -type f -name "prod.keys" -exec mv {} game_folder/ \;
