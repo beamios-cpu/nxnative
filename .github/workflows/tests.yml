@@ -205,7 +205,7 @@ jobs:
       # 2. ดึงไฟล์เกม .nsp และคีย์ จาก Google Drive
       - name: Download Game Files from Google Drive
         run: |
-          gdown https://drive.google.com/uc?id=1n42wJXdFkbHBLkPFHL0S1iT_tBdVFlvc -O game_files.zip
+          gdown https://drive.google.com/uc?id=1BwGSrSd1pcy_WV5upDelixl24hAPY6cY -O game_files.zip
           unzip -o game_files.zip -d game_folder/
           # เปลี่ยน 2 บรรทัดล่างนี้ เพื่อบังคับย้ายและเปลี่ยนชื่อไฟล์ให้มี Title ID ตรงตามที่สคริปต์ต้องการ
           find game_folder -type f -iname "*.nsp" -exec mv {} "game_folder/Pokemon_[0100F43008C44000].nsp" \;
