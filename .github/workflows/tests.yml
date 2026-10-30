@@ -205,7 +205,7 @@ jobs:
       # 2. ดึงไฟล์เกม .nsp และคีย์ จาก Google Drive
       - name: Download Game Files from Google Drive
         run: |
-          gdown https://drive.google.com/uc?id=1BwGSrSd1pcy_WV5upDelixl24hAPY6cY -O game_files.zip
+          gdown https://drive.google.com/uc?id=1nfxwbtnLlNIyCJQJyA_f3nuJY-7a7zim -O game_files.zip
           unzip -o game_files.zip -d game_folder/
           
           # เปลี่ยนชื่อและดึงไฟล์ทั้ง 3 ตัวออกมาหน้าสุด
