@@ -205,12 +205,11 @@ jobs:
       # 2. ดึงไฟล์เกม .nsp และคีย์ จาก Google Drive
       - name: Download Game Files from Google Drive
         run: |
-          gdown https://drive.google.com/uc?id=1V-fh05h5p4pGc-9obvB5l_RWmrXGR5N7 -O game_files.zip
+          gdown https://drive.google.com/uc?id=19igOyI6xBQuMLH0hTCud6XWxT-Fxn40Q -O game_files.zip
           unzip -o game_files.zip -d game_folder/
-          # 1. บังคับเปลี่ยนชื่อไฟล์ NSP ให้มีรหัส Title ID ของเกม Pokemon Z-A
-          find game_folder -type f -iname "*.nsp" -exec mv {} "game_folder/Pokemon_[0100F43008C44000].nsp" \;
-          # 2. บังคับหาไฟล์คีย์ และเปลี่ยนชื่อเป็น prod.keys ให้ถูกต้อง (แก้ปัญหาซ่อนนามสกุล .txt)
-          find game_folder -type f -iname "*prod*key*" -exec mv {} game_folder/prod.keys \;
+          # เพิ่ม 2 บรรทัดนี้ เพื่อดึงไฟล์ prod.keys และ .nsp ออกมาจากโฟลเดอร์ที่ซ้อนกัน
+          find game_folder -type f -name "prod.keys" -exec mv {} game_folder/ \;
+          find game_folder -type f -name "*.nsp" -exec mv {} game_folder/ \;
 
       # 3. รันสคริปต์สร้าง IPA ตัวจริง
       - name: Build the production iOS IPA
