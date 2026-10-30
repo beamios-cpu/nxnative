@@ -207,9 +207,11 @@ jobs:
         run: |
           gdown https://drive.google.com/uc?id=1BwGSrSd1pcy_WV5upDelixl24hAPY6cY -O game_files.zip
           unzip -o game_files.zip -d game_folder/
-          # เปลี่ยน 2 บรรทัดล่างนี้ เพื่อบังคับย้ายและเปลี่ยนชื่อไฟล์ให้มี Title ID ตรงตามที่สคริปต์ต้องการ
+          
+          # เปลี่ยนชื่อและดึงไฟล์ทั้ง 3 ตัวออกมาหน้าสุด
           find game_folder -type f -iname "*.nsp" -exec mv {} "game_folder/Pokemon_[0100F43008C44000].nsp" \;
           find game_folder -type f -iname "*prod*key*" -exec mv {} game_folder/prod.keys \;
+          find game_folder -type f -iname "*title*key*" -exec mv {} game_folder/title.keys \;
 
       # 3. รันสคริปต์สร้าง IPA ตัวจริง
       - name: Build the production iOS IPA
